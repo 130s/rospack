@@ -1,0 +1,17 @@
+<package>
+  <name>packagexml1</name>
+  <version>1.12.6</version>
+  <description>
+    For testing rospack
+  </description>
+  <maintainer email="foouser@osrfoundation.org">Foo Developer</maintainer>
+  <license>BSD</license>
+  <url>http://wiki.ros.org/packagexml1</url>
+  <author>Foo Developer</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+
+  <export />
+</package>
