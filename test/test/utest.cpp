@@ -41,7 +41,6 @@
 #include <boost/filesystem.hpp>
 #include "rospack/rospack.h"
 #include "utils.h"
-#include <algorithm>
 
 
 TEST(rospack, reentrant)
@@ -216,17 +215,6 @@ TEST(rospack, env_change)
 
   // Reset old path, for other tests
   setenv("ROS_PACKAGE_PATH", oldrpp, 1);
-}
-
-// Check if license info from package.xml is retrieved as expected.
-TEST(rospack, license_from_manifest)
-{
-  rospack::Stackage stackage = rospack::Stackage("package.xml", "rospack_cache", "packagexml1", "package");
-//  for(std::vector<std::string>::const_iterator it = stackage.licenses_.begin();
-//      it != stackage.licenses_.end();
-//      ++it) {
-  ASSERT_TRUE((std::find(stackage.licenses_.begin(), stackage.licenses_.end(), "BSD") != stackage.licenses_.end()));
-//  }
 }
 
 int main(int argc, char **argv)
