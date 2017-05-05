@@ -2,8 +2,15 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 catkin_add_gtest(${PROJECT_NAME}-utest 
           test/utest.cpp ${PROJECT_SOURCE_DIR}/src/rospack_cmdline.cpp ${PROJECT_SOURCE_DIR}/src/utils.cpp
           WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+catkin_add_gtest(${PROJECT_NAME}-utest_packagexml
+          test/utest_packagexml.cpp ${PROJECT_SOURCE_DIR}/src/rospack_cmdline.cpp ${PROJECT_SOURCE_DIR}/src/utils.cpp
+          WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
 if(TARGET ${PROJECT_NAME}-utest)
   target_link_libraries(${PROJECT_NAME}-utest rospack)
+endif()
+if(TARGET ${PROJECT_NAME}-utest_packagexml)
+  target_link_libraries(${PROJECT_NAME}-utest_packagexml rospack)
 endif()
 
 # Prepare to run the tests.  This could be cleaner.
@@ -12,6 +19,9 @@ add_custom_target(${PROJECT_NAME}-prepare_test
                   COMMAND cmake -E chdir test/deep "${PYTHON_EXECUTABLE}" deep.py)
 if(TARGET ${PROJECT_NAME}-utest)
   add_dependencies(${PROJECT_NAME}-utest ${PROJECT_NAME}-prepare_test)
+endif()
+if(TARGET ${PROJECT_NAME}-utest_packagexml)
+  add_dependencies(${PROJECT_NAME}-utest_packagexml ${PROJECT_NAME}-prepare_test)
 endif()
 
 configure_file(test/utest.py.in
