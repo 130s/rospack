@@ -107,10 +107,12 @@ and Rosstack.
 
 #include <boost/tr1/unordered_set.hpp>
 #include <boost/tr1/unordered_map.hpp>
+#include <functional>
 #include <list>
 #include <map>
 #include <set>
 #include <string>
+#include "tinyxml.h"
 #include <vector>
 #include "macros.h"
 
@@ -130,8 +132,39 @@ typedef enum
 } traversal_order_t;
 
 // Forward declarations
-class Stackage;
 class DirectoryCrawlRecord;
+
+class Stackage
+{
+  public:
+    // \brief name of the stackage
+    std::string name_;
+    // \brief absolute path to the stackage
+    std::string path_;
+    // \brief absolute path to the stackage manifest
+    std::string manifest_path_;
+    // \brief filename of the stackage manifest
+    std::string manifest_name_;
+    // \brief package's license with a support for multi-license.
+    std::vector<std::string> licenses_;
+    // \brief have we already loaded the manifest?
+    bool manifest_loaded_;
+    // \brief TinyXML structure, filled in during parsing
+    TiXmlDocument manifest_;
+    std::vector<Stackage*> deps_;
+    bool deps_computed_;
+    bool is_wet_package_;
+    bool is_metapackage_;
+
+    Stackage(const std::string& name,
+             const std::string& path,
+             const std::string& manifest_path,
+             const std::string& manifest_name);
+
+    void update_wet_information();
+    bool isStack() const;
+    bool isPackage() const;
+};
 
 /**
  * @brief The base class for package/stack ("stackage") crawlers.  Users of the library should
@@ -280,6 +313,12 @@ class ROSPACK_DECL Rosstackage
                   std::string& stack,
                   std::string& path);
 
+    /**
+     * @brief List license(s) of a stackage whose name is passed.
+     * @param deps Names of the depended stackages.
+     * @param licenses Pairs of (package name, license(s)).
+     */
+    void licenses(std::vector<std::string>& deps, std::set<Stackage, std::not_equal_to<Stackage> >& license_stackages);
     /**
      * @brief List names and paths of all stackages.
      * @param list Pairs of (name,path) are written here.
