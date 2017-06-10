@@ -380,7 +380,7 @@ rospack_run(int argc, char** argv, rospack::Rosstackage& rp, std::string& output
     	// Packages
     	// - package name
     	// - license names
-    	std::set<Stackage> stackages;
+    	std::set<Stackage, std::not_equal_to<Stackage> > stackages;
 
     	rp.licenses(deps, stackages);
         for(std::set<Stackage>::const_iterator it_stackage = stackages.begin();
